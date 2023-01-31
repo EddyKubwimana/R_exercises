@@ -1,0 +1,206 @@
+---
+title: '"Homework assignment 1"'
+author: '"Eddy Kubwimana"'
+date: "2023-01-27"
+output: word_document
+---
+
+```{r setup, message = FALSE}
+library(readr)
+
+data = read.delim("C:\\Users\\user\\OneDrive - Ashesi University\\Desktop\\Ashesi University education\\Third semester\\Statistic and propability\\Assignments\\StudentsData.txt")
+```
+
+### QUESTION 1
+
+### a
+
+```{r}
+
+
+t = table(data$Major);t
+prop = prop.table(t);prop
+percent = prop.table(t)*100; percent
+pf = round(percent, 1);pf
+label = paste(c("BA", "CS", "MIS"),pf, "%", sep = " "); label
+pie(t, label = label, main = "Pie chart of distribution of statistics student Majors")
+```
+### b
+```{r}
+
+t1 = table(data$Cafeteria)
+t2 = t1[order(t1, decreasing = TRUE)]
+percent = prop.table(t2)*100
+percent = round(percent,1)
+label = paste(c("Munchies", "BigBen", "Akornor"),percent, "%", sep = " ")
+barplot(percent,main = "Cafetaria preference at Ashesi UNIVERSITY",legend.text = label, ylim = c(0,50),col = c("lightblue", "mistyrose", "lightcyan"))
+
+
+
+```
+### Questions 2
+
+### a
+
+```{r}
+
+hist(data$Expenditure, breaks = 20, col = "lightblue",ylim = c(0,50), main="Student expenditures", xlab = "Interval of amount spent per week", ylab = "Number of students")
+```
+```{r}
+hist(data$Age, breaks =10, col = "lightblue",ylim = c(0,120), main="Student ages", xlab = "Ages", ylab = "Number of students")
+
+```
+### b
+
+```{r}
+
+#Looking at he histogram of students expenditures per week, It is clear that the distribution of Student expenditure is not symmetrical, thus, the measure center and spread should be median and IQR
+ 
+
+print("The median of students expenditures")
+median(data$Expenditure)
+print("IQR for student expenditures")
+IQR(data$Expenditure)
+
+
+#looking at the age distribution of student taking statistics, we can assume that the distribution is almost symmetrical although it appears to have one outlier, I will use mean and sd as a measure of center and spread
+
+print("The mean of student ages distribution")
+mean(data$Age)
+print("Standard deviation from student ages data")
+sd(data$Age)
+
+```
+### c
+
+Looking at the the histogram for student expenditures and students age distributions, I noticed that student expenditures have a large spread, and the shape is neither skewed to the right nor left. However, for student ages, it appears that, although the distribution is not perfectly symmetric, it is almost a bell shaped distribution. Both distribution have outliers to far right of the distribution.
+
+### Question 3:
+
+  9 | 147
+  10 | 02238
+  11 | 125566777
+  12 | 223489
+  13 | 02
+a.	List the first 5 values in the data set.
+
+Answers: 91, 94, 97,  100, 102.
+
+b.	What is the median amount of fees paid?
+
+Answer : 116 cedis 
+
+c.	Does the dataset have a mode? 
+
+Answer: of course, the dataset has a mode of 117, in the data set, there are three occurence of
+of 117 which makes it a mode
+
+d.	Complete the following sentence “The middle 50% of customers paid between _102.5__ and _122.5___ cedis as fees.
+
+Thought process:
+
+Q1 position in data set = (N+1)*1/4 = (25+1)/4 = 6.5,  Q1 = (102+103) = 102.5
+Q3 position in dataset = (N+1)*3/4 = (25+1)3/4 = 19.5, Q1 = (122+123) = 122.5
+
+e.	What is the IQR for the dataset?
+
+Answers:  IQR  = Q3 - Q1 = 122.5 - 102.5 = 20
+
+f.	Determine if there are any outliers using the IQR rule. (Show calculations for the IQR rule in a code chunk.)
+
+```{r}
+#To verify if a dataset has an outiliers, we apply the following formula
+Q1 = 102;Q1
+M = 116;M
+Q3 = 122.5;Q3
+int_q_range = Q3-Q1
+# the the lowest value accepted using the IQR
+low_value = M-(1.5*int_q_range)
+# there is not outlier the least data in the dataset on left end is 91 which is greater than 85.23
+
+# The 
+hig_value = M+(1.5*int_q_range);hig_value
+
+# there is not outlier the least data in the dataset on right end is 132 which is less than 146.75
+
+```
+
+
+### Question 4
+ 
+ 
+### a
+```{r}
+
+
+# boxplot for two variable Expenditure and cafetaria
+
+boxplot(data$Expenditure ~ data$Cafeteria, main="Spending of Statistics Students at cafetaria",sub =" Cafetaria", ylab="Expenditure (Expenditure)",col = c("lightblue", "mistyrose", "lightcyan"))
+
+```
+### b
+```{r}
+tapply(data$Expenditure,data$Cafeteria,fivenum)
+```
+
+### c
+Looking a students expenditures as a function of cafetaria, I realized that 75% of expenditure student at : AKornor range from 200 cedis to 420 cedis with an outlier of 600, BigBen range from 100 to 500, Munchies range from 130 to 600 cedis. I have also seen that there is wide spread in people catered at Munchies and BigBen than Akornor. We can from the boxplot assume that maybe Munchies and bigBen have both expensive and cheap recipe compared with Akornor which seems to have same recipe with prices that does not vary to much.
+
+
+### Question 5
+
+
+### a
+```{r}
+plot(data$Age,data$Expenditure, main="Age as a function of Expenditure",xlab="CGPA",ylab="Friends", ylim = c(10, 610),xlim = c(15, 26))
+
+#b
+#Creating a linear model:
+model = lm(data$Expenditure~data$Age)
+abline(model)
+
+
+```
+```{r}
+#c
+#correlation coefficient
+cor(data$Age,data$Expenditure,use="complete.obs")
+```
+### d. 
+Looking at the scatterplot, there is no linear relationship between ages and weekly spending on food for statistics students. If  you look at coefficient, its less 0.26 which shows a very weak correlation among the two variables.
+
+### Question 6
+
+### b a
+```{r}
+gradeA = c(588,579,585,580,583)
+sort(gradeA)
+gradeB = c(570, 574, 572, 571, 578)
+sort(gradeB)
+combin_grade = data.frame(gradeA, gradeB)
+mean(combin_grade$gradeA)
+mean(combin_grade$gradeB)
+median(combin_grade$gradeA)
+median(combin_grade$gradeB)
+sd(combin_grade$gradeA)
+sd(combin_grade$gradeB)
+```
+b) Grade A is providing a providing better because its mean and median are greater than grade B mean and median and also the inner diameter is greater than the expected one. Although the standard deviation for grade B tires is less than grade A tires, the lowest value in grade B tires is greater than the median and mean  of  grade B tires.
+
+C)If the last value in grade B were 588, it would increase the value of mean. but the median would almost stay the same, the standard deviation also would increase for grade B.
+```{r}
+#coding illustrating what would happen if the the last value were 588
+
+gradeB = c(570, 574, 572, 571, 588)
+combin_grade = data.frame(gradeA, gradeB)
+mean(combin_grade$gradeB)
+
+#Previously the mean was 573, but now it is 575, this show how mean is intolerant to outliers
+
+median(combin_grade$gradeB)
+
+#Previously the median was 572 and it is still 572, which show how the median is tolerant to outliers
+
+
+```
+However, the b answer would not change because the new number is an outliers which would not qualifier grade B to be of good quality than grade A
