@@ -1,0 +1,276 @@
+---
+title: "Assignment"
+author: '"Eddy Kubwimana"'
+date: "2023-02-12"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+student = read.delim("C:\\Users\\user\\OneDrive - Ashesi University\\Desktop\\Ashesi University education\\Third semester\\Statistic and propability\\Assignments\\StudentsData.txt")
+region = read.delim("C:\\Users\\user\\OneDrive - Ashesi University\\Desktop\\Ashesi University education\\Third semester\\Statistic and propability\\Assignments\\GhanaRegions.txt")
+```
+
+# QUESTION 1
+
+# a) 
+Explanatory variable is an independent variable while a response variable is dependent variable. For instances, if you are doing a experiment study, explanatory variable is the variable you manipulate while the response variable is the variable that responds to the change in the exploratory variable.
+
+# b)
+```{r}
+# Two way table for exploring two categorical variable
+
+cagender = table(student$Cafeteria, student$Gender);cagender
+
+
+```
+# c)
+we should use columns percentage because if we use raw data, the problem that may arise is that one gender may be underrepresented or over  in sample which may make our analysis trivial. However, if we use column percentages is a ratio form which best represents the pattern between gender of statistics and cafetaria preferences.
+
+
+```{r}
+percentCagender = round( 100*prop.table(cagender,2),1);percentCagender
+
+```
+
+# d)
+
+The percentage for each columns add up to 100%.
+ *For female, 11.3+ 42.5+46.2 = 100%
+ * For male, 24.1+29.5+46.4 = 100 %
+ 
+ 
+# f)
+The percentage of student who would prefer BigBen as the go to cafetaria on campus are:
+
+* Female : 42.5%
+* Male : 29.5%
+
+# g)
+The percentage of student who would prefer Akorno as the go to cafetaria on campus are:
+
+* Female : 11.3%
+* Male : 24.1%
+
+# h
+ I think there is a gender effect on cafeteria preference because if you look at the table we can see the pattern that for both females and males, Munchies is their favorite, however, you can see that Bigben and Akornor for males have pretty the same percentage of preference, however, for females, munchies and BigBen are highly preferred while Akornor is at 11.3%
+ 
+
+# Question2:
+
+# a)
+
+The study is observational because the research is about looking at the impact of one district one factory in Ghana's populous regions. The researcher will not perform experiment or tweaks any variable to see what happens.
+
+# b) 
+
+Type of sampling being used is cluster sampling because in all list of one district one project, each company registered in the five randomly selected will be used in the research.
+
+# c)
+The sampling frame is the impact of of one district one factory project in Ghana's populous regions with population greater than 1.000.000
+
+
+# d) 
+```{r}
+#selecting the regions that have the population that is greater than 1 million
+
+popRegion = region[region$Population> 1000000,];popRegion
+
+# using random sampling method to choose 5 regions
+
+indexSample = sample( 1: length(popRegion$Population),5); indexSample
+
+popSample = popRegion[indexSample,]; popSample
+```
+
+# e)
+ *1 I created a variable popRegion which stores regions with more than 1000000
+ *2 I created an indexSample that randomly select an index among all index in popRegion which contains all regions with more than 1000000
+ 
+ *3 Finally, I applied those selected index into my popRegion to select the final sample to use
+ 
+ 
+# f)
+
+```{r}
+
+hist(popRegion$Population/1000, breaks = 15, main = " Histogram of populous region n Ghana", col = "lightblue",xlab = "population in 1000", xlim = c(1000,6000), ylim = c(0.5, 4))
+
+
+```
+ 
+The measure of spread has to be IQR Because the distribution of the population is right skewed, the measure of center is median.
+
+``` {r}
+# summary of the populous regions in Ghana
+#summary(popRegion$Population)
+
+summary = summary(popRegion$Population); summary
+
+```
+
+Looking the five main points, there maximum population is the outlier because it goes above median + 1.5*IQR
+
+# Question3:
+
+```{r}
+
+hist(student$Expenditure, breaks = 20, col = "lightblue",ylim = c(0,50), main="Student expenditures", xlab = "Interval of amount spent per week", ylab = "Number of students")
+
+```
+
+#checking if students weekly expenditures is symmetrical
+
+```{r}
+# mean :
+
+mean = mean(student$Expenditure);mean
+
+# median
+median = median(student$Expenditure);median
+
+# mode
+mode = mode(student$Expenditure);mode
+
+# standard deviation
+std = sd(student$Expenditure);std
+
+```
+Since the mean, mode and media median are not equal, the distribution is not symmetrical.
+
+# a 
+
+the portion of the student below the mean, I think since the distribution is not symmetric, the information that I am going to find by using the standard deviation is not going to reflect the real answers, because I believe median would have been a good measure for spread and center.
+
+I am doing to do it theoritically since the question does not provide flexible on measure of center or spread to use
+
+```{r}
+# to find the number of student below mean
+
+number = student[student$Expenditure<mean,]
+
+below_average = nrow(number);below_average
+
+```
+# b
+
+
+```{r}
+# to find the number of student within one standard deviation
+
+number = student[student$Expenditure>= mean-std & student$Expenditure<= mean+std,]
+
+onestd = nrow(number);onestd
+
+```
+
+# c
+
+within two standard deviation of the mean
+
+```{r}
+# to find the number of student within two standard deviation
+
+number = student[student$Expenditure>= mean-2*std & student$Expenditure<= mean+2*std,]
+
+twostd = nrow(number);twostd
+
+```
+# d
+between 3 standard deviation of the mean
+
+```{r}
+# to find the number of student within one standard deviation
+
+number = student[student$Expenditure>= mean-3*std & student$Expenditure<= mean+3*std,]
+
+threestd = nrow(number);threestd
+```
+Within one standard deviation, there were 49.5 % of whole student, within two standard deviation , there were 99% of student and finally within within two standard deviation there were 100% of student. this show how the dataset distribution is not symmetric.
+
+# e
+
+```{r}
+# to check it is unusual for a student to spend less than 100 
+
+number = student[student$Expenditure <= 100,]
+
+less100= nrow(number);less100
+
+```
+Looking at the number of student who spend less than on food on weekly basis, it is not unusual.
+because 53 out 218 is a significant number but it would be less likely to happen. 
+
+# Question 4:
+
+# a)
+
+In  the study, they used systematic sampling, because they have K index the use to select an individual to add in their sample.
+
+```{r}
+# Silverstar Tower Branch Waiting Times
+
+Tower = c(9.4, 8.3, 9.4, 6.6, 3.0, 7.8, 10.5, 9.8, 9.8,4.7, 5.9); Tower
+
+# Accra Mall Branch Waiting Times
+Accra = c(8.4, 6.6, 9.0, 5.6, 2.2, 5.3, 6.6, 7.3, 7.5, 7.2, 6.0, 7.5, 8.9,  4.5);Accra
+# Osu Mall Branch Waiting Times
+Osu  = c(7.9, 7.0, 7.1, 7.4, 6.7, 6.7, 7.3, 7.6, 6.0, 7.3, 7.2, 6.8);Osu
+```
+```{r}
+# Silverstar Tower Branch Waiting Times mean and standard deviation
+
+meanT = mean(Tower); meanT
+stdT = sd(Tower); stdT
+
+
+# Accra Mall Branch Waiting Times mean and standard deviation
+
+meanA = mean(Accra); meanA
+stdA = sd(Accra); stdA
+
+# Osu Mall Branch Waiting Times mean and standard deviation
+
+meanO = mean(Osu);meanO
+stdO = sd(Osu);stdO
+
+```
+# b
+- At silverstar Tower Branch the average waiting is 7.7. However, in  the worst case scenario, you can wait up to 10.5 minutes and in best case scenario, you wait up to 3 minutes. it is evident that is a wide spread between worst and best case waiting time
+
+- At Accra Mall Branch, the average waiting time is 6.61. However, in the worst case scenario, you can wait up to 9.0 and in the best case scenario, you can wait yo to 2.2 minutes.  it is also evident that there is a bit big spread although this branch spread is better than Tower branch
+
+-At Osu Mall branch, the average waiting time is 7 minutes. However, in the worse case scenario, you can wait up to 7.9 and in best case scenario, you can wait up to 6 minutes. 
+
+The branch that performs better is Osu mall because there is a bit of consistency in a waiting time. The worst performing branch is Tower branch because there is a wide variety among waiting times.
+
+
+# c
+
+```{r}
+Tower = c(200, 350, 220, 180, 500, 320, 370, 350, 300, 310); Tower
+Accra = c(1200, 2000, 3500, 3000, 2700, 2450, 1900, 2100, 2200, 2600); Tower
+
+# Mean and standard deviation of the Tower branch
+Mean = mean(Tower); Mean
+std = sd(Tower); std
+
+# Looking at the the mean and the standard deviation, there is a large a disparity among employees'salary.
+
+# Mean and standard deviation of the Accra Mall
+Mean = mean(Accra); Mean
+std = sd(Accra); std
+
+# Looking at the mean and the standard deviation, there is a wide disparity among employees'salary
+
+```
+
+# Question 5:
+
+# a)
+It is an experiment, it is not blind  because the participants know that they are eating kenkey and they researcher instructed each group on how regurly to eat kenkey depending on individual kenkey consumption habit.
+
+# b)
+It is a prospective observatory research because the researchers are collecting the research data in the present  because they do not modify any variable instead watch them in their natural occurence. They do not influence the outcome of their study.
+
+
